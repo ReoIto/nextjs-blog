@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 import Date from '../components/date'
 import Layout, {siteTitle} from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostsData()
   return {
     props: {
@@ -14,11 +15,20 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({ allPostsData }) {
+export default function Home({
+  allPostsData
+}: {
+  allPostsData: {
+    date: string
+    title: string
+    id: string
+  }[]
+}) {
   return (
     <Layout home>
       <Head>
         <title>{siteTitle}</title>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
       <section className={utilStyles.headingMd}>
         <p>二郎系ラーメン大好きだけど、麺半分で頼んじゃうよ</p>
@@ -41,6 +51,11 @@ export default function Home({ allPostsData }) {
             </li>
           ))}
         </ul>
+      </section>
+      <section>
+      <Link href={`/dashBoard`}>
+        <p><a className={utilStyles.headingLg}>Dashboard</a>  はTailwindUiで作ってるよ</p>
+      </Link>
       </section>
     </Layout>
   )
